@@ -1,4 +1,6 @@
 {
   "title": "new title",
-  "content": "new content uwu"
+  "content": "new content uwu",
+  "phone": "5555555555",
+  "isClosed": true
 }
