@@ -42,7 +42,7 @@ export default function Contact(props) {
                     </div>
                     <div className="px-4 py-12 md:px-12 md:py-20">
                         <h2 className="mb-6 border-y text-3xl font-bold text-gray-700 [border-image:linear-gradient(to_right,transparent,theme(colors.slate.700/.7),transparent)1] md:mb-12 md:text-4xl">
-                            Contáctanos
+                            Preguntas al Whatsapp
                         </h2>
                         <br />
                         <a href={"https://wa.me/" + number.phone} className="mb-6 border-y text-3xl font-bold text-gray-700 [border-image:linear-gradient(to_right,transparent,theme(colors.slate.700/.7),transparent)1] md:mb-12 md:text-4xl">

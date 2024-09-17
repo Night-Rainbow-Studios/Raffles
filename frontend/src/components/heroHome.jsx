@@ -1,17 +1,6 @@
 "use client";
-import { useState, useEffect } from 'react';
 
 export default function HeroHome(props) {
-    const [heroic, setHeroic] = useState("")
-
-    async function fetchAPI() {
-        const result = await props.service.getContent();
-        setHeroic(result);
-    }
-
-    useEffect(() => {
-        fetchAPI()
-    }, []);
 
     return (
         <section className="relative bg-[url('/images/dinero_img.webp')] h-[50rem]" id="hero">
@@ -25,7 +14,7 @@ export default function HeroHome(props) {
                             data-aos="zoom-y-out"
                             data-aos-delay={150}
                         >
-                            {heroic.title}
+                            <h1>-LISTA DE DISPONIBLES-</h1>
                         </a>
                     </div>
                 </div>
