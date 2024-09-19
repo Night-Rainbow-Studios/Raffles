@@ -25,7 +25,7 @@ export default function BuyTickets() {
             <Header service={service} />
             <div className='max-w-full text-center m-2'>
                 <h1 className='text-xl md:text-6xl text-gray-50 m-2 md:m-4 p-1 md:p-5 bg-green-900'>{heroic.title}</h1>
-                <h2 className='text-xl md:text-4xl text-gray-900 m-2 md:m-3 p-1 md:p-4'>XX DE SEPTIEMBRE DEL 2024</h2>
+                <h2 className='text-xl md:text-4xl text-gray-900 m-2 md:m-3 p-1 md:p-4'>{heroic.date}</h2>
             </div>
             <div className='max-w-full text-center m-2'>
                 <h1 className='text-xl md-text-4xl text-gray-800 underline'>
@@ -36,10 +36,10 @@ export default function BuyTickets() {
                 <img src='/images/dinero_img.webp' className='border-2 border-rose-500 object-center'></img>
             </div>
             <div className='max-w-full text-center m-4 bg-gray-800 p-5 text-gray-50'>
-                <h1 className='text-xl md:text-2xl m-2'>1 BOLETO POR $5</h1>
-                <h1 className='text-xl md:text-2xl m-2'>2 BOLETO POR $5</h1>
-                <h1 className='text-xl md:text-2xl m-2'>3 BOLETO POR $5 el mas vendido!</h1>
-                <h1 className='text-xl md:text-2xl m-2'>5 BOLETO POR $5</h1>
+                <h1 className='text-xl md:text-2xl m-2'>{heroic.info1}</h1>
+                <h1 className='text-xl md:text-2xl m-2'>{heroic.info2}</h1>
+                <h1 className='text-xl md:text-2xl m-2'>{heroic.info3}</h1>
+                <h1 className='text-xl md:text-2xl m-2'>{heroic.info4}</h1>
             </div>
             <div className='max-w-full text-center bg-yellow-300 m-2 md:m-3 p-2 md:p-5'>
                 <h1 className='text-2xl md:text-4xl'>Estos sorteos son seguros</h1>

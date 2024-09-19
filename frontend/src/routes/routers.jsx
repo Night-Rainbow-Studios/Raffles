@@ -4,6 +4,7 @@ import {
 import Landing from "../pages/landing";
 import RaffleClosed from "../pages/raffleClosed";
 import BuyTickets from "../pages/buyTickets";
+import AdminDashboard from "../pages/adminDashboard";
 
 const routes = createBrowserRouter([
     {
@@ -17,6 +18,10 @@ const routes = createBrowserRouter([
     {
         path: "/buyTickets",
         element: <BuyTickets />
+    },
+    {
+        path: "/adminDashboard",
+        element: <AdminDashboard />
     }
 ])
 
