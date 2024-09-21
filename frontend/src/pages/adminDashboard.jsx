@@ -27,6 +27,16 @@ export default function AdminDashboard() {
                         Buscar</button>
                     </div>
                 </label>
+                <label className='flex md:grid max-w-full justify-between m-3 p-2 border-2'> 
+                <h1 className='text-bold font-sans font-semibold'>Buscar orden</h1>
+                <div className='flex'>
+                    <input type='text' id='ticketsAmount' className='m-3 block p-3 md:m-1 md:p-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
+            focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500
+            disabled:bg-slate-50 disabled:text-slate-500 disabled:border-slate-200 disabled:shadow-none' placeholder='Número de orden'/>
+                    <button type="submit" className="text-white bg-slate-700 hover:bg-slate-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-slate-600 dark:hover:bg-slate-700 dark:focus:ring-blue-800 my-2">
+                        Buscar</button>
+                    </div>
+                </label>
             </div>
 
             <div className='bg-white max-w-full m-2 md:m-4 p-2 md: p-3'>
