@@ -1,6 +1,13 @@
 "use client";
+import { useState, useEffect } from "react";
+import { Link } from 'react-router-dom';
 
 export default function HeroHome(props) {
+    const [isClosed, setIsClosed] = useState(true);
+    async function fetchAPI() {
+        const result = await props.service.getContent();
+        setIsClosed(result);
+    }
 
     return (
         <section className="relative bg-[url('/images/dinero_img.webp')] h-[50rem]" id="hero">
@@ -9,13 +16,12 @@ export default function HeroHome(props) {
                 <div className="pb-12 pt-32 md:pb-20 md:pt-40">
                     {/* Section header */}
                     <div className="pb-12 text-center md:pb-16">
-                        <a href="/"
+                        <Link to={isClosed.isClosed ? "/raffleClosed" : "/buyTickets"}
                             className="mb-6 border-y text-5xl [border-image:linear-gradient(to_right,transparent,theme(colors.slate.300/.8),transparent)1] md:text-6xl text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 shadow-lg shadow-red-500/50 dark:shadow-lg dark:shadow-red-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
                             data-aos="zoom-y-out"
                             data-aos-delay={150}
-                        >
-                            <h1>-LISTA DE DISPONIBLES-</h1>
-                        </a>
+                        > -LISTA DE DISPONIBLES-
+                        </Link>
                     </div>
                 </div>
             </div>
