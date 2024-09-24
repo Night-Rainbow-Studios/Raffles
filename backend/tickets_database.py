@@ -17,9 +17,16 @@ def generate_tickets(digits, amount):
         cursor.execute("INSERT INTO tickets (id, isFree) VALUES (?, ?)", (ticket_id, True))
     connection.close
 
+def generate_order(amount, price, payed):
+    order_id = random.randint(10000, 99999)
+    total_price = order_price_set(amount, price)
+    cursor.execute("insert into orders (id, payed, price) VALUES (?, ?, ?)", (order_id, payed, total_price))
+    connection.close
+    relacionar_tickets(order_id, amount)
+
 def create_database():
     cursor.execute("create table tickets (id integer, isFree boolean)")
-    cursor.execute("create table orders (id integer primary key, customer_id integer, payed boolean, price numeric(8,2))")
+    cursor.execute("create table orders (id integer primary key, payed boolean, price numeric(8,2))")
     cursor.execute("""
         CREATE TABLE order_tickets (
             order_id INTEGER,
@@ -31,7 +38,7 @@ def create_database():
     connection.close
 
 def order_test(amount):
-    cursor.execute("insert into orders (id, customer_id) VALUES (?, ?)", (1, 1))
+    cursor.execute("insert into orders (id, payed, price) VALUES (?, ?, ?)", (1, 1, 1, 500))
     relacionar_tickets(1, amount)
     connection.close
 
@@ -60,6 +67,10 @@ def order_check():
     for row in cursor.execute("select * from order_tickets"):
         print(row)
     connection.close
+
+def order_price_set(amount, price):
+    total = amount * price
+    return total
 
 def test_database():
     for row in cursor.execute("select * from tickets"):
