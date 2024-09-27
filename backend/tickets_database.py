@@ -21,16 +21,30 @@ def generate_tickets(digits, amount):
         ticket_id = generate_id(digits)
         cursor.execute("INSERT INTO tickets (id, isFree) VALUES (?, ?)", (ticket_id, True))
     connection.close
+    return "Success"
 
-def generate_order(amount, price, payed):
+def generate_order(amount, price):
+    payed = False
     cursor, connection = openConnection()
     order_id = random.randint(10000, 99999)
+    print("ID Lista: ", order_id)
     total_price = order_price_set(amount, price)
+    print("Precio listo: ", total_price)
     time = datetime.datetime.now()
+    print("Fecha lista: ", time)
     int_time = int(time.timestamp())
-    cursor.execute("insert into orders (id, payed, price, date) VALUES (?, ?, ?)", (order_id, payed, total_price, int_time))
+    cursor.execute("insert into orders (id, payed, price, date) VALUES (?, ?, ?, ?)", (order_id, payed, total_price, int_time))
     connection.close
+    print("Agregado a la base de datos")
     relacionar_tickets(order_id, amount)
+    return order_id
+
+def pay_order(id):
+    cursor, connection = openConnection()
+    cursor.execute("UPDATE orders SET payed = 1 WHERE id = ?", (id,))
+    print("Orden pagada")
+    connection.commit()
+    connection.close()
 
 def create_database():
     cursor, connection = openConnection()
@@ -45,6 +59,7 @@ def create_database():
         )
     """)
     connection.close
+    return "Created"
 
 def closeOrder(id):
     cursor, connection = openConnection()
@@ -55,6 +70,7 @@ def closeOrder(id):
         update_ticket(row)
     cursor.execute("delete from order_tickets where order_id = ?", (id))
     cursor.close()
+    return "Closed"
 
 def compareTime():
     cursor, connection = openConnection()
@@ -73,12 +89,15 @@ def compareTime():
 
 def finishRaffle():
     cursor, connection = openConnection()
-    cursor.execute("select id from orders where payed = :t", {"t":"true"})
+    cursor.execute("select id from orders where payed = :f", {"f":"false"})
     orders = cursor.fetchall()
+    print("Terminando rifa. Todas las ordenes cargadas.")
     connection.close()
     for order in orders:
+        print("Cerrando orden", order)
         closeOrder(order)
     cursor.execute("select id from tickets where isFree =:f", {"f":"false"})
+    print("Cargando tickets, eligiendo al ganador.")
     tickets = cursor.fetchall()
     random_row = random.choice(tickets)
     winner = random_row[0]
@@ -112,6 +131,7 @@ def relacionar_tickets(order, amount):
         update_ticket(row[0])
         connection.close
         amountcito += 1
+    connection.close()
 
 def order_check():
     cursor, connection = openConnection()
@@ -129,9 +149,14 @@ def test_database():
         print(row)
     connection.close
 
-def clear_tickets():
+def clear_DB():
     cursor, connection = openConnection()
+    cursor.execute("delete from order_tickets")
+    print("Borrada base de datos relacional.")
+    cursor.execute("delete from orders")
+    print("Borrada tabla de ordenes.")
     cursor.execute("delete from tickets")
+    print("Borrados todos los tickets.")
     connection.close
 
 def update_ticket(id):
@@ -149,24 +174,29 @@ def update_ticket(id):
 
 def consult_database():
     cursor, connection = openConnection()
-    cursor.execute("select * from tickets where isFree=:t", {"t":"true"})
+    cursor.execute("select * from tickets")
     searcher = cursor.fetchall()
     print(searcher)
     print("*****")
     connection.close
-
-def insert_data():
-    cursor, connection = openConnection()
-    cursor.execute("insert into tickets values (?,?)", ("29472", "true"))
-    for row in cursor.execute("select * from tickets"):
-        print(row)
-
-    connection.close
+    return searcher
 
 if __name__ == "__main__":
+    create_database()
+    print("Base de datos creada.")
     generate_tickets(3, 20)
-    test_database()
-    order_test(5)
-    order_check()
-    print("Estado actual de tickets")
-    test_database()
+    print("Database generated")
+    orderID = generate_order(5,5)
+    print("Orden lista: ", orderID)
+    secondOrder = generate_order(4, 5)
+    print("Segunda orden lista: ", secondOrder)
+    thirdOrder = generate_order(2, 5)
+    print("Tercera orden lista: ", thirdOrder)
+    pay_order(orderID)
+    print("Primera orden pagada")
+    pay_order(secondOrder)
+    print("Segunda orden pagada")
+    winner = finishRaffle()
+    print("El ganador es: ", winner)
+    clear_DB()
+    print("Rifa completada.")
