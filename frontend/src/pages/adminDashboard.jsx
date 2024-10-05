@@ -1,5 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
+import Tickets_List from '../components/tickets';
 
 export default function AdminDashboard() {
     return (
@@ -68,6 +69,9 @@ export default function AdminDashboard() {
                 <div className='m-2 md:m-5 p-2 md:p-5'>
                     <button className='bg-red-700 text-white rounded p-4 font-sans font-bold hover:bg-red-500'>Eliminar base de datos de boletos</button>
                 </div>
+            </div>
+            <div>
+                <Tickets_List/>
             </div>
         </section>
     )

@@ -27,37 +27,37 @@ def hero ():
 @app.route("/api/tickets", methods=["POST"])
 def generateTickets(digits, amount, db):
     tickets = tickets_logic.generate_tickets(digits, amount, db)
-    return tickets
+    return jsonify(tickets)
 
-@app.route("/api/ticket", methods = ["GET"])
+@app.route("/api/tickets", methods = ["GET"])
 def fetchTickets(db):
     consulted = tickets_logic.fetch_tickets(db)
-    return consulted
+    return jsonify(consulted)
 
 @app.route("/api/orders", methods = ["POST"])
 def generateOrder(amount, price, db):
     order = tickets_logic.generate_order(amount, price, db)
-    return order
+    return jsonify(order)
 
 @app.route("/api/orders", methods = ["PUT"])
 def closeOrder(id, db):
     order = tickets_logic.close_order(id, db)
-    return order
+    return jsonify(order)
 
 @app.route("/api/order/<id>", methods = ["PUT"])
 def payOrder(id, db):
     order = tickets_logic.pay_order(id, db)
-    return order
+    return jsonify(order)
 
 @app.route("/api/ticket/<id>", methods = ["GET"])
 def consultTicket(id, db):
     ticket = tickets_logic.consult_ticket(id, db)
-    return ticket
+    return jsonify(ticket)
 
 @app.route("/api/order/<id>", methods = ["GET"])
 def consultOrder(id, db):
     order = tickets_logic.consult_order(id, db)
-    return order
+    return jsonify(order)
 
 if __name__ == "__main__":
     app.run(debug=True, port=8080)
