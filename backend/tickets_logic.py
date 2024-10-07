@@ -28,7 +28,6 @@ def order_price_set(amount, price):
     total = amount * price
     return total
 
-
 def generate_order(amount, price, mongo):
     payed = False
     order_id = random.randint(10000, 99999)
@@ -37,6 +36,7 @@ def generate_order(amount, price, mongo):
     int_time = int(time.timestamp())
     tickets = []
     tickets = get_tickets(amount)
+    print(tickets)
     order = mongo.db.orders.insert_one({
         'payed': payed,
         'id':order_id,
@@ -56,10 +56,11 @@ def close_order(id, mongo):
     order = mongo.db.orders.find_one({"id":id})
     tickets_list = []
     tickets_list = order["tickets"]
+    ticket_status = False
     for ticket in tickets_list:
-        update_ticket(ticket)
+        update_ticket(ticket, ticket_status)
     mongo.db.orders.delete_one({"id":id})
-    response = jsonify({"message":"Order " + id + "was deleted"})
+    response = jsonify({"message":"Order " + str(id) + "was deleted"})
     return response
 
 def compare_time(mongo):
@@ -74,13 +75,25 @@ def compare_time(mongo):
             close_order(order["id"])
 
 def finish_raffle(mongo):
-    unpayed_orders = mongo.db.orders.find({"payed":False})
+    unpayed_orders = mongo.db.orders.find({"payed": False})
     for order in unpayed_orders:
         close_order(order["id"])
-    final_tickets = mongo.db.tickets.find({"isFree":False})
-    random_ticket = random.choice(final_tickets)
-    winner = random_ticket["id"]
-    return winner    
+        print("Closed order", order["id"])
+
+    # Contar los tickets sin pagar manualmente
+    num_tickets = 0
+    for _ in mongo.db.tickets.find({"isFree": False}):
+        num_tickets += 1
+
+    # Si no hay tickets sin pagar, retorna None
+    if num_tickets == 0:
+        return None
+
+    # Saltar un número aleatorio de documentos y elegir el siguiente
+    random_skip = random.randrange(num_tickets)
+    winner_ticket = mongo.db.tickets.find({"isFree": False}).skip(random_skip).limit(1).next()
+
+    return winner_ticket["id"]    
 
 def get_tickets(amount, mongo):
     tickets_collection = mongo.db.tickets
@@ -90,30 +103,30 @@ def get_tickets(amount, mongo):
         if len(order_tickets) == amount:
             return order_tickets
         order_tickets.append(ticket["id"])
-        update_ticket(ticket)
+        update_ticket(id=ticket["id"], isFree=ticket["isFree"])
     if not order_tickets:
         print("No se encontraron tickets libres suficientes.")
     return order_tickets
 
-def update_ticket(mongo, **ticket):
-    current_isFree = ticket["isFree"]
+def update_ticket(mongo, id, isFree):
+    current_isFree = isFree
     new_status = not current_isFree
-    mongo.db.tickets.update_one({"_id":ticket["_id"]}, {'$set':{
+    mongo.db.tickets.update_one({"id":id}, {'$set':{
         'isFree':new_status
     }})
 
 def clear_db(mongo):
-    mongo.db.orders.delete_many()
-    mongo.db.tickets.delete_many()
+    mongo.db.orders.delete_many({})
+    mongo.db.tickets.delete_many({})
     return "Deleted"
 
 def fetch_orders(mongo):
     orders = mongo.db.orders.find()
-    return orders
+    return list(orders)
 
 def fetch_tickets(mongo):
     tickets = mongo.db.tickets.find()
-    return tickets
+    return list(tickets)
 
 def consult_ticket(id, mongo):
     ticket = mongo.db.tickets.find_one({"id": id})
