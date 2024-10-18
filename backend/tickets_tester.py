@@ -2,6 +2,8 @@ from flask_pymongo import PyMongo
 from flask import Flask, jsonify, Response
 import random
 import datetime
+import json
+from bson import json_util
 
 app = Flask(__name__)
 app.config['MONGO_URI']='mongodb://localhost/pythonmongodb'
@@ -42,21 +44,22 @@ def generate_order(amount, price):
     tickets = get_tickets(amount)
     print("Your tickets are: ")
     print(tickets)
-    order = mongo.db.orders.insert_one({
+    mongo.db.orders.insert_one({
         'payed': payed,
         'id':order_id,
         'price':total_price,
         'time':int_time,
         'tickets':tickets
     })
-    return order
+    return order_id
 
 def pay_order(id):
-    status = mongo.db.orders.update_one({"id":id}, {'$set':{
+    mongo.db.orders.update_one({"id":id}, {'$set':{
         'payed':True
     }})
     print("order " + str(id) + " has been payed")
-    return status
+    isPayed = True
+    return isPayed
 
 def close_order(id):
     order = mongo.db.orders.find_one({"id":id})
@@ -140,9 +143,11 @@ def consult_ticket(id):
 
 def consult_order(id):
     order = mongo.db.orders.find_one({"id":id})
-    return order
+    response = json.loads(json_util.dumps(order))
+    return response
 
 if __name__ == "__main__":
-    ticket = 76030
-    consulted =  consult_ticket(ticket)
-    print(consulted)
+    listed = consult_order(24710)
+
+    print(listed["price"])
+    print(listed)

@@ -6,7 +6,7 @@ import hero_databases
 import tickets_logic
 
 app = Flask(__name__)
-cors = CORS(app, origins="*")
+cors = CORS(app)
 app.config['MONGO_URI']='mongodb://localhost/pythonmongodb'
 db = PyMongo(app)
 
@@ -25,9 +25,9 @@ def hero ():
     return data
 
 @app.route("/api/tickets", methods=["POST"])
-def generateTickets(digits, amount, db):
-    tickets = tickets_logic.generate_tickets(digits, amount, db)
-    return jsonify(tickets)
+def generateTickets():
+    tickets_logic.generate_tickets(int(request.args.get("digits")), int(request.args.get("amount")), db)
+    return {"message":"Success"}
 
 @app.route("/api/tickets", methods = ["GET"])
 def fetchTickets(db):
@@ -35,29 +35,44 @@ def fetchTickets(db):
     return jsonify(consulted)
 
 @app.route("/api/orders", methods = ["POST"])
-def generateOrder(amount, price, db):
-    order = tickets_logic.generate_order(amount, price, db)
-    return jsonify(order)
+def generateOrder():
+    order = tickets_logic.generate_order(int(request.args.get("amount")), int(request.args.get("price")), db)
+    return order
 
-@app.route("/api/orders", methods = ["PUT"])
-def closeOrder(id, db):
-    order = tickets_logic.close_order(id, db)
-    return jsonify(order)
+@app.route("/api/closeOrder/<id>", methods = ["PUT"])
+def closeOrder(id):
+    order = tickets_logic.close_order(int(id), db)
+    return order
 
 @app.route("/api/order/<id>", methods = ["PUT"])
-def payOrder(id, db):
-    order = tickets_logic.pay_order(id, db)
-    return jsonify(order)
+def payOrder(id):
+    payed = tickets_logic.pay_order(int(id), db)
+    return payed
 
 @app.route("/api/ticket/<id>", methods = ["GET"])
-def consultTicket(id, db):
-    ticket = tickets_logic.consult_ticket(id, db)
+def consultTicket(id):
+    ticket = tickets_logic.consult_ticket(int(id), db)
     return jsonify(ticket)
 
 @app.route("/api/order/<id>", methods = ["GET"])
-def consultOrder(id, db):
-    order = tickets_logic.consult_order(id, db)
-    return jsonify(order)
+def consultOrder(id):
+    order = tickets_logic.consult_order(int(id), db)
+    return order
+
+@app.route("/api/winner", methods = ["PUT"])
+def finishRaffle():
+    winner = tickets_logic.finish_raffle(db)
+    return winner
+
+@app.route("/api/clear", methods = ["PUT"])
+def clearDatabase():
+    clearer = tickets_logic.clear_db(db)
+    return clearer
+
+@app.route("/api/orders", methods = ["GET"])
+def fetchOrders():
+    orders = tickets_logic.fetch_orders(db)
+    return orders
 
 if __name__ == "__main__":
     app.run(debug=True, port=8080)

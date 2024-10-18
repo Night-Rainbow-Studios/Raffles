@@ -1,6 +1,12 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
 import Tickets_List from '../components/tickets';
+import ConsultOrder from '../components/orderConsultor';
+import GenerateDb from '../components/generateDb';
+import ClearRaffleButton from '../components/clearRaffleButton';
+import PayOrder from '../components/payOrder';
+import CloseOrder from '../components/closeOrder';
+import WinRaffle from '../components/winRaffle';
 
 export default function AdminDashboard() {
     return (
@@ -18,7 +24,7 @@ export default function AdminDashboard() {
                         <button type='submit' className='m-2 p-2 border-2 border-black rounded hover:bg-gray-800 hover:text-white placeholder-slate-400'>Enviar</button>
                     </div>
                 </label>
-                <label className='flex md:grid max-w-full justify-between m-3 p-2 border-2'> 
+                {/* <label className='flex md:grid max-w-full justify-between m-3 p-2 border-2'> 
                 <h1 className='text-bold font-sans font-semibold'>Buscar boletos</h1>
                 <div className='flex'>
                     <input type='text' id='ticketsAmount' className='m-3 block p-3 md:m-1 md:p-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
@@ -27,8 +33,8 @@ export default function AdminDashboard() {
                     <button type="submit" className="text-white bg-slate-700 hover:bg-slate-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-slate-600 dark:hover:bg-slate-700 dark:focus:ring-blue-800 my-2">
                         Buscar</button>
                     </div>
-                </label>
-                <label className='flex md:grid max-w-full justify-between m-3 p-2 border-2'> 
+                </label> */}
+                {/* <label className='flex md:grid max-w-full justify-between m-3 p-2 border-2'> 
                 <h1 className='text-bold font-sans font-semibold'>Buscar orden</h1>
                 <div className='flex'>
                     <input type='text' id='ticketsAmount' className='m-3 block p-3 md:m-1 md:p-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
@@ -37,7 +43,8 @@ export default function AdminDashboard() {
                     <button type="submit" className="text-white bg-slate-700 hover:bg-slate-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-slate-600 dark:hover:bg-slate-700 dark:focus:ring-blue-800 my-2">
                         Buscar</button>
                     </div>
-                </label>
+                </label> */}
+            <ConsultOrder/>
             </div>
 
             <div className='bg-white max-w-full m-2 md:m-4 p-2 md: p-3'>
@@ -56,7 +63,7 @@ export default function AdminDashboard() {
       disabled:bg-slate-50 disabled:text-slate-500 disabled:border-slate-200 disabled:shadow-none' placeholder='Linea 4'/> <br/>
       <button type="submit" className="text-white bg-slate-700 hover:bg-slate-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-slate-600 dark:hover:bg-slate-700 dark:focus:ring-blue-800">Enviar</button>
             </div>
-            <div className='md:flex md:justify-around'>
+            {/* <div className='md:flex md:justify-around'>
                 <div className='m-3 p-2 bg-white max-w-full border-2 border-slate-500'>
                     <h1 className='font-sans font-bold underline'>Generar Base de datos de boletos</h1>
                     <label >Elegir cantidad
@@ -69,7 +76,12 @@ export default function AdminDashboard() {
                 <div className='m-2 md:m-5 p-2 md:p-5'>
                     <button className='bg-red-700 text-white rounded p-4 font-sans font-bold hover:bg-red-500'>Eliminar base de datos de boletos</button>
                 </div>
-            </div>
+            </div> */}
+            <GenerateDb/>
+            <ClearRaffleButton/>
+            <PayOrder/>
+            <CloseOrder/>
+            <WinRaffle/>
             <div>
                 <Tickets_List/>
             </div>

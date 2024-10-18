@@ -2,6 +2,8 @@ from flask_pymongo import PyMongo
 from flask import Flask, jsonify, Response
 import random
 import datetime
+from bson import json_util
+import json
 
 # app = Flask(__name__)
 # app.config['MONGO_URI']='mongodb://localhost/pythonmongodb'
@@ -35,22 +37,24 @@ def generate_order(amount, price, mongo):
     time = datetime.datetime.now()
     int_time = int(time.timestamp())
     tickets = []
-    tickets = get_tickets(amount)
+    tickets = get_tickets(amount, mongo)
     print(tickets)
-    order = mongo.db.orders.insert_one({
+    mongo.db.orders.insert_one({
         'payed': payed,
         'id':order_id,
         'price':total_price,
         'time':int_time,
         'tickets':tickets
     })
-    return order
+    result = {"id":order_id}
+    return result
 
 def pay_order(id, mongo):
-    status = mongo.db.orders.update_one({"id":id}, {'$set':{
+    mongo.db.orders.update_one({"id":id}, {'$set':{
         'payed':True
     }})
-    return status
+    response = {"isPayed":True}
+    return response
 
 def close_order(id, mongo):
     order = mongo.db.orders.find_one({"id":id})
@@ -58,7 +62,7 @@ def close_order(id, mongo):
     tickets_list = order["tickets"]
     ticket_status = False
     for ticket in tickets_list:
-        update_ticket(ticket, ticket_status)
+        update_ticket(mongo, ticket, ticket_status)
     mongo.db.orders.delete_one({"id":id})
     response = jsonify({"message":"Order " + str(id) + "was deleted"})
     return response
@@ -77,7 +81,7 @@ def compare_time(mongo):
 def finish_raffle(mongo):
     unpayed_orders = mongo.db.orders.find({"payed": False})
     for order in unpayed_orders:
-        close_order(order["id"])
+        close_order(order["id"], mongo)
         print("Closed order", order["id"])
 
     # Contar los tickets sin pagar manualmente
@@ -92,8 +96,9 @@ def finish_raffle(mongo):
     # Saltar un número aleatorio de documentos y elegir el siguiente
     random_skip = random.randrange(num_tickets)
     winner_ticket = mongo.db.tickets.find({"isFree": False}).skip(random_skip).limit(1).next()
+    winning_id = {"winner": winner_ticket["id"]}
 
-    return winner_ticket["id"]    
+    return winning_id    
 
 def get_tickets(amount, mongo):
     tickets_collection = mongo.db.tickets
@@ -103,7 +108,7 @@ def get_tickets(amount, mongo):
         if len(order_tickets) == amount:
             return order_tickets
         order_tickets.append(ticket["id"])
-        update_ticket(id=ticket["id"], isFree=ticket["isFree"])
+        update_ticket(mongo, id=ticket["id"], isFree=ticket["isFree"])
     if not order_tickets:
         print("No se encontraron tickets libres suficientes.")
     return order_tickets
@@ -118,11 +123,12 @@ def update_ticket(mongo, id, isFree):
 def clear_db(mongo):
     mongo.db.orders.delete_many({})
     mongo.db.tickets.delete_many({})
-    return "Deleted"
+    return {"mensaje":"Borrado"}
 
 def fetch_orders(mongo):
     orders = mongo.db.orders.find()
-    return list(orders)
+    response = json.loads(json_util.dumps(orders))
+    return list(response)
 
 def fetch_tickets(mongo):
     tickets = mongo.db.tickets.find()
@@ -134,4 +140,5 @@ def consult_ticket(id, mongo):
 
 def consult_order(id, mongo):
     order = mongo.db.orders.find_one({"id":id})
-    return order
+    response = json.loads(json_util.dumps(order))
+    return response

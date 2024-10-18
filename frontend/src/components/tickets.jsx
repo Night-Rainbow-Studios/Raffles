@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom';
 import Ticket from './ticket';
-import ticketsService from './ticketsService';
+import ticketsService from '../services/content/tickets_service.js'
 
 function Tickets_List() {
     const [tickets, setTickets] = useState([]);

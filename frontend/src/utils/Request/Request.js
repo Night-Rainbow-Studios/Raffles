@@ -36,17 +36,19 @@ export default class Request{
             xml.setRequestHeader("Content-Type","application/json")
 
             xml.addEventListener("load",(response)=>{
-                if(response.status>=400){
-                    reject({error:response.status});
+                console.log("Request result:");
+                console.log(response);
+                if(response.currentTarget.status>=400){
+                    reject({error:response.currentTarget.status});
                     return 
                 }
 
-                resolve(response);
+                resolve(JSON.parse(response.currentTarget.responseText));
 
             },false);
 
             xml.addEventListener("error",()=>{
-
+                console.log("Error while sending request")
                 reject({error:"Something goes wrong"})
             })
 
