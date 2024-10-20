@@ -2,6 +2,10 @@ import React, { useEffect, useRef, useState } from 'react';
 import Api from '../utils/Request/Api';
 import TextField from '@mui/material/TextField';
 import { Button, Alert, CircularProgress } from '@mui/material';
+import contentService from '../services/content/content_service';
+import WhatsAppLink from './ui/purchaseButton';
+
+const service = new contentService()
 
 
 export default function OrderGenerator() {
@@ -18,7 +22,7 @@ export default function OrderGenerator() {
             var request = api.post("api/orders")
             request.query({amount:amount.current, price:price})
             var result = await request.send({})
-            updateOperation(<Alert severity="success">Operacion Exitosa. Tu ID de orden es {result.id}</Alert>)
+            updateOperation(<Alert severity="success">Operacion Exitosa. Tu ID de orden es {result.id} y el precio es {result.price} <WhatsAppLink service = {service} id = {result.id} price = {result.price}/></Alert>)
             console.log(result)
         } catch (error) {
             updateOperation(<Alert severity="error">Error</Alert>)

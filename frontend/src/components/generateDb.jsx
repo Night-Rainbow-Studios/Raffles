@@ -30,7 +30,7 @@ export default function GenerateDb() {
   return (
     <div className='m-3 p-2 bg-white max-w-full border-2 border-slate-500' style={{display:"flex", flexDirection:"column", gap:"10px"}}>
         <h1 className='font-sans font-bold underline'>Generar Base de datos de boletos</h1>
-        <TextField id = "enter_digits" label = "Digitos" variant = "outlined" onChange={(event) => {digits.current = event.target.value}}/>
+        <TextField id = "enter_digits" label = "Digitos (solo 3 0 5)" variant = "outlined" onChange={(event) => {digits.current = event.target.value}}/>
         <TextField id = "enter_amount" label = "Cantidad" variant = "outlined" onChange={(event) => {amount.current = event.target.value}}/>
         <div className='flex justify-center max-w-full'>{operationStatus}</div>
         <Button onClick={() => {callAPI()}} variant = "contained" sx={{width:"20vh"}}>Generar</Button>
