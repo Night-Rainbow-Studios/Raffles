@@ -49,6 +49,32 @@ def generate_order(amount, price, mongo):
     result = {"id":order_id, "price":total_price}
     return result
 
+def generate_specific_order(selected_ticket_ids, price, mongo):
+
+    payed = False
+    order_id = random.randint(10000, 99999)
+    total_price = order_price_set(len(selected_ticket_ids), price)  # Calculate based on selected tickets
+    time = datetime.datetime.now()
+    int_time = int(time.timestamp())
+
+    # Get the tickets based on the selected IDs
+    aparted_tickets = get_specific_tickets(selected_ticket_ids, mongo)
+
+    # Check if all tickets were successfully retrieved
+    if len(aparted_tickets) != len(selected_ticket_ids):
+        print(f"Warning: Not all selected tickets were found. Order may be incomplete.")
+
+    mongo.db.orders.insert_one({
+        'payed': payed,
+        'id': order_id,
+        'price': total_price,
+        'time': int_time,
+        'tickets': aparted_tickets,  # Use the returned list of IDs
+    })
+
+    result = {"id": order_id, "price": total_price, "time": int_time}
+    return result
+
 def pay_order(id, mongo):
     mongo.db.orders.update_one({"id":id}, {'$set':{
         'payed':True
@@ -75,7 +101,7 @@ def compare_time(mongo):
         current_timestamp = int(current_date.timestamp())
         difference_seconds = current_timestamp - timeStamp
         difference_hours = difference_seconds / 3600
-        if difference_hours >= 6:
+        if difference_hours >= 1:
             close_order(order["id"])
 
 def finish_raffle(mongo):
@@ -113,6 +139,22 @@ def get_tickets(amount, mongo):
         print("No se encontraron tickets libres suficientes.")
     return order_tickets
 
+def get_specific_tickets(ticket_ids, mongo):
+
+    tickets_collection = mongo.db.tickets
+    
+    aparted_tickets = []
+
+    for ticket_id in ticket_ids:
+        ticket = tickets_collection.find_one({"id": ticket_id})
+        if ticket:
+            aparted_tickets.append(ticket_id)
+            update_ticket(mongo, id=ticket["id"], isFree=ticket["isFree"])
+        else:
+            print(f"Ticket con ID {ticket_id} no encontrado.")
+
+    return aparted_tickets
+
 def update_ticket(mongo, id, isFree):
     current_isFree = isFree
     new_status = not current_isFree
@@ -132,7 +174,8 @@ def fetch_orders(mongo):
 
 def fetch_tickets(mongo):
     tickets = mongo.db.tickets.find()
-    return list(tickets)
+    response = json.loads(json_util.dumps(tickets))
+    return list(response)
 
 def consult_ticket(id, mongo):
     ticket = mongo.db.tickets.find_one({"id": id})
@@ -142,3 +185,8 @@ def consult_order(id, mongo):
     order = mongo.db.orders.find_one({"id":id})
     response = json.loads(json_util.dumps(order))
     return response
+
+def fetch_free_tickets(mongo):
+    tickets = mongo.db.tickets.find({"isFree": True})
+    response = json.loads(json_util.dumps(tickets))
+    return list(response)

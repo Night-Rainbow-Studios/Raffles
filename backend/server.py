@@ -30,9 +30,9 @@ def generateTickets():
     return {"message":"Success"}
 
 @app.route("/api/tickets", methods = ["GET"])
-def fetchTickets(db):
+def fetchTickets():
     consulted = tickets_logic.fetch_tickets(db)
-    return jsonify(consulted)
+    return consulted
 
 @app.route("/api/orders", methods = ["POST"])
 def generateOrder():
@@ -73,6 +73,20 @@ def clearDatabase():
 def fetchOrders():
     orders = tickets_logic.fetch_orders(db)
     return orders
+
+@app.route("/api/freeTickets", methods = ["GET"])
+def fetchFreeTickets():
+    freetickets = tickets_logic.fetch_free_tickets(db)
+    return freetickets
+
+@app.route("/api/specificOrder", methods = ["POST"])
+def generateSpecificOrder():
+    order_data = request.get_json()
+    selected_tickets = order_data.get('selected_tickets', [])  # Obtener los IDs de los tickets
+    price = order_data.get('price', 0.0)  # Obtener el precio
+
+    specific_order = tickets_logic.generate_specific_order(selected_tickets, price, db)
+    return specific_order
 
 if __name__ == "__main__":
     app.run(debug=True, port=8080)

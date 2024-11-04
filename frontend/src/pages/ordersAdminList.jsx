@@ -1,10 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
-import Api from './utils/Request/Api';
+import Api from '../utils/Request/Api';
 import { Button, Alert, CircularProgress } from '@mui/material';
-import AvailableTickets from './components/ui/availableTickets';
-import TicketsTable from './components/ui/ticketsTable';
+import OrdersRender from '../components/ui/ordersRender';
 
-export default function Test() {
+export default function OrdersAdminList() {
 
     const [resultStatus, updateResult] = useState();
 
@@ -17,10 +16,11 @@ export default function Test() {
         try {
             updateResult(<CircularProgress />)
             var api = new Api({host:"http://localhost:8080"})
-            var request = api.get("api/freeTickets")
+            var request = api.get("api/orders")
             var result = await request.send({})
-            console.log("Available Tickets fetched");
-            updateResult(<AvailableTickets availableTickets = {result}/>)
+            console.log("Orders fetched");
+            console.log(result)
+            updateResult(<OrdersRender orders = {result}/>)
         } catch (error) {
             updateResult(<Alert severity="error">Error</Alert>)
             console.log("error")
@@ -30,6 +30,6 @@ export default function Test() {
 
 
   return (
-    <TicketsTable/>
+    <section>{resultStatus}</section>
   )
 }

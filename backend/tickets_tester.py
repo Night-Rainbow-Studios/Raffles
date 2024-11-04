@@ -147,7 +147,5 @@ def consult_order(id):
     return response
 
 if __name__ == "__main__":
-    listed = consult_order(24710)
-
-    print(listed["price"])
+    listed = close_order(59802)
     print(listed)

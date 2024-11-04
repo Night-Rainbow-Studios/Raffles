@@ -13,6 +13,8 @@ export default function AdminDashboard() {
         <section className='bg-slate-200'>
             <header className='flex max-w-full justify-end m-3 md:m-5 p-2 md:p-4 bg-neutral-800 font-mono font-bold sticky top-0'>
                 <Link to={'/'} className='bg-gray-200 m-1 p-1 rounded-sm text-slate-950 text-lg hover:bg-gray-400 hover:text-slate-200'>Inicio</Link>
+                <Link to={'/adminOrders'} className='bg-gray-200 m-1 p-1 rounded-sm text-slate-950 text-lg hover:bg-gray-400 hover:text-slate-200'>Ordenes</Link>
+                <Link to={'/adminTickets'} className='bg-gray-200 m-1 p-1 rounded-sm text-slate-950 text-lg hover:bg-gray-400 hover:text-slate-200'>Tickets</Link>
                 <a href='#edit' className=' m-1 p-1 text-lg rounded-sm bg-yellow-400 text-slate-800 hover:bg-yellow-700 hover:text-slate-300'>Editar</a>
             </header>
 

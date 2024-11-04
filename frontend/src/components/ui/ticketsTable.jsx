@@ -1,10 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
-import Api from './utils/Request/Api';
+import Api from '../../utils/Request/Api';
 import { Button, Alert, CircularProgress } from '@mui/material';
-import AvailableTickets from './components/ui/availableTickets';
-import TicketsTable from './components/ui/ticketsTable';
+import AvailableTickets from './availableTickets';
 
-export default function Test() {
+export default function TicketsTable() {
 
     const [resultStatus, updateResult] = useState();
 
@@ -30,6 +29,9 @@ export default function Test() {
 
 
   return (
-    <TicketsTable/>
+    <section>
+        <div className='text-center'><h1>ELIGE TU NUMERO DE LA SUERTE</h1></div>
+        <div>{resultStatus}</div>
+    </section>
   )
 }

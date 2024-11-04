@@ -2,7 +2,7 @@ import React from 'react'
 import Header from '../components/header'
 import Footer from '../components/footer'
 import SearchBar from '../components/searchBar.jsx'
-import TicketsTable from '../components/ticketsTable.jsx'
+import TicketsTable from '../components/ui/ticketsTable.jsx'
 import contentService from '../services/content/content_service.js'
 import OrderGenerator from '../components/orderGenerator.jsx'
 import { useState, useEffect } from "react";
@@ -50,6 +50,7 @@ export default function BuyTickets() {
                 <h1 className='text-xl md:text-2xl text-gray-50'>HAZ CLICK ABAJO EN TU NUMERO DE LA SUERTE</h1>
             </div>
             <OrderGenerator/>
+            <TicketsTable/>
             {/* <div className='flex justify-center m-3 md:m-4 p-2 md:-4 bg-emerald-400 m-2 md:m-6'>
                 <p className='p-3 mx-2 bg-gray-50 rounded-full'> </p>
                 <p className='text-xl md:text-2xl'>Blancos = Disponibles</p>
