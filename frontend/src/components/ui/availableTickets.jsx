@@ -6,10 +6,6 @@ import CustomerForm from './customerForm';
 export default function AvailableTickets(props) {
   const [selectedTickets, setSelectedTickets] = useState([]);
   const fixedPrice = 5
-  const [customerData, setCustomerData] = useState({
-    name: '',
-    phone: '',
-  });
 
   const [orderData, setOrderData] = useState({
     id:'',
@@ -19,10 +15,6 @@ export default function AvailableTickets(props) {
 
   const [showForm, setShowForm] = useState(false);
   const [orderedTickets, setOrderedTickets] = useState([]);
-
-  const handleInputChange = (event) => {
-    setCustomerData({ ...customerData, [event.target.name]: event.target.value });
-  };
 
 
   const handleTicketClick = (ticketId) => {
@@ -90,7 +82,7 @@ export default function AvailableTickets(props) {
               Apartar
             </Button>
           )}
-          {showForm && <CustomerForm onChange={handleInputChange} selectedTickets={orderedTickets} orderData={orderData} customerName={customerData.name} customerPhone={customerData.phone}/>}
+          {showForm && <CustomerForm selectedTickets={orderedTickets} orderData={orderData}/>}
         </div>
     </>
   );

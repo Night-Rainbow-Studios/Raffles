@@ -46,7 +46,7 @@ def generate_order(amount, price, mongo):
         'time':int_time,
         'tickets':tickets
     })
-    result = {"id":order_id, "price":total_price}
+    result = {"id":order_id, "price":total_price, "tickets": tickets, "time": int_time}
     return result
 
 def generate_specific_order(selected_ticket_ids, price, mongo):

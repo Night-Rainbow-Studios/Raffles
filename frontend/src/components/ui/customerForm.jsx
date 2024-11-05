@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import { TextField, Alert } from '@mui/material';
 import moment from 'moment';
 
-export default function CustomerForm({ onChange, selectedTickets, orderData, customerName, customerPhone }) {
+export default function CustomerForm({ selectedTickets, orderData }) {
 
   const formattedDate = moment.unix(orderData.time).format('DD/MM/YYYY, HH:mm');
 
@@ -11,6 +11,14 @@ export default function CustomerForm({ onChange, selectedTickets, orderData, cus
   const [whatsUrl, setWhatsUrl] = useState("");
 
   const testNumber = "525537244511"
+
+  const [customerData, setCustomerData] = useState({
+    name: '',
+    phone: '',
+  });
+  const handleInputChange = (event) => {
+    setCustomerData({ ...customerData, [event.target.name]: event.target.value });
+  };
 
   // const [number, setNumber] = useState("")
 
@@ -22,6 +30,7 @@ export default function CustomerForm({ onChange, selectedTickets, orderData, cus
     // useEffect(() => {
     //     fetchPhone()
     // }, []);
+    // customerName={customerData.name} customerPhone={customerData.phone}
 
   function createWhatsAppMessage(orderData, customerName, customerPhone, formattedTickets) {
     const formattedDate = moment.unix(orderData.time).format('DD/MM/YYYY, HH:mm');
@@ -34,16 +43,16 @@ export default function CustomerForm({ onChange, selectedTickets, orderData, cus
   useEffect(() => {
     const newFormattedTickets = selectedTickets.map(ticket => `${ticket}%0D`);
     setFormattedTickets(newFormattedTickets);
-    const whatsUrl = createWhatsAppMessage(orderData, customerName, customerPhone, formattedTickets);
+    const whatsUrl = createWhatsAppMessage(orderData, customerData.name, customerData.phone, formattedTickets);
     setWhatsUrl(whatsUrl);
-  }, [selectedTickets, orderData, customerName, customerPhone]);
+  }, [selectedTickets, orderData, customerData.name, customerData.phone]);
 
   const [isFormFilled, setIsFormFilled] = useState(false);
 
   useEffect(() => {
 
-    setIsFormFilled(customerName !== "" && customerPhone !== "");
-  }, [customerName, customerPhone]);
+    setIsFormFilled(customerData.name !== "" && customerData.phone !== "");
+  }, [customerData.name, customerData.phone]);
 
   return (
     <div>
@@ -66,7 +75,7 @@ export default function CustomerForm({ onChange, selectedTickets, orderData, cus
             label="Nombre Completo"
             variant="outlined"
             name="name"
-            onChange={onChange}
+            onChange={handleInputChange}
             required
           />
         </div>
@@ -76,7 +85,7 @@ export default function CustomerForm({ onChange, selectedTickets, orderData, cus
             label="Número de teléfono"
             variant="outlined"
             name="phone"
-            onChange={onChange}
+            onChange={handleInputChange}
             required
           />
         </div>
