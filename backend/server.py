@@ -88,5 +88,10 @@ def generateSpecificOrder():
     specific_order = tickets_logic.generate_specific_order(selected_tickets, price, db)
     return specific_order
 
+@app.route("/api/frontendTicket/<id>", methods = ["GET"])
+def verifyTicket(id):
+    ticket = tickets_logic.ticket_frontend(int(id), db)
+    return ticket
+
 if __name__ == "__main__":
     app.run(debug=True, port=8080)

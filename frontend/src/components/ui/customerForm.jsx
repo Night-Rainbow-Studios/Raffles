@@ -15,6 +15,7 @@ export default function CustomerForm({ selectedTickets, orderData }) {
   const [customerData, setCustomerData] = useState({
     name: '',
     phone: '',
+    city: '',
   });
   const handleInputChange = (event) => {
     setCustomerData({ ...customerData, [event.target.name]: event.target.value });
@@ -32,20 +33,20 @@ export default function CustomerForm({ selectedTickets, orderData }) {
     // }, []);
     // customerName={customerData.name} customerPhone={customerData.phone}
 
-  function createWhatsAppMessage(orderData, customerName, customerPhone, formattedTickets) {
+  function createWhatsAppMessage(orderData, customerName, customerPhone, customerCity, formattedTickets) {
     const formattedDate = moment.unix(orderData.time).format('DD/MM/YYYY, HH:mm');
 
-    const encodedMessage = `https://wa.me/${testNumber}?text=%2A%2ARifas%20MX%2A%2A%0A%0AHola.%20Mi%20nombre%20es%20${customerName}%2C%20y%20mi%20n%C3%BAmero%20de%20tel%C3%A9fono%20es%20${customerPhone}.%0A%0AOrden%3A%2${orderData.id}%0AApartado%20el%3A%20${formattedDate}.%0AImporte%20a%20pagar%3A%20${orderData.price}.%0A%0ABoletos%3A%0A${formattedTickets}%0A%0AEnlace%20para%20ver%20las%20cuentas%20para%20pagar%3A%0Ahttps%3A%2F%2Frifas.com%2FcuentasPago%0A%0Ael%20siguiente%20paso%20es%20enviar%20tu%20comprobante%20de%20pago%20por%20este%20medio%2C%20en%20cuanto%20env%C3%ADes%20tu%20comprobante%20te%20llegar%C3%A1%20tu%20boleto%20digital.%0A%0A55555555555555%20banco%20STP%20----------%20a%20nombre%20de%20Jon%20Doe%0A%0A55555555555555%20banco%20BBVA%20--------a%20nombre%20de%20John%20Doe%0A%0A%E2%9A%A0EXCLUSIVO%20DEP%C3%93SITO%20EN%20OXXO%E2%9A%A0%20555555555%2B%2B%2B%2Bbanco%20SPIN%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2Ba%20nombre%20de%20John%20Doe%0A%0AEntiendo%20que%20debo%20enviar%20mi%20comprobante%20de%20pago%20v%C3%ADa%20WhatsApp%20en%20un%20lapso%20no%20mayor%20a%20una%20hora.%0A%0ARifas%20MX`;
+    const encodedMessage = `https://wa.me/${testNumber}?text=%2A%2ARifas%20MX%2A%2A%0A%0AHola.%20Mi%20nombre%20es%20${customerName}%2C%20y%20mi%20n%C3%BAmero%20de%20tel%C3%A9fono%20es%20${customerPhone}.%0A%0AOrden%3A%20${orderData.id}%0AApartado%20el%3A%20${formattedDate}.%0AMi%20ciudad%20es%3A%20${customerCity}.%0AImporte%20a%20pagar%3A%20%24${orderData.price}.%0A%0ABoletos%3A%0A${formattedTickets}%0A%0AEnlace%20para%20ver%20las%20cuentas%20para%20pagar%3A%0Ahttps%3A%2F%2Frifas.com%2FcuentasPago%0A%0Ael%20siguiente%20paso%20es%20enviar%20tu%20comprobante%20de%20pago%20por%20este%20medio%2C%20en%20cuanto%20env%C3%ADes%20tu%20comprobante%20te%20llegar%C3%A1%20tu%20boleto%20digital.%0A%0A55555555555555%20banco%20STP%20----------%20a%20nombre%20de%20Jon%20Doe%0A%0A55555555555555%20banco%20BBVA%20--------a%20nombre%20de%20John%20Doe%0A%0A%E2%9A%A0EXCLUSIVO%20DEP%C3%93SITO%20EN%20OXXO%E2%9A%A0%20555555555%2B%2B%2B%2Bbanco%20SPIN%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2Ba%20nombre%20de%20John%20Doe%0A%0AEntiendo%20que%20debo%20enviar%20mi%20comprobante%20de%20pago%20v%C3%ADa%20WhatsApp%20en%20un%20lapso%20no%20mayor%20a%20una%20hora.%0A%0ARifas%20MX`;
   
     return encodedMessage;
   }
 
   useEffect(() => {
-    const newFormattedTickets = selectedTickets.map(ticket => `${ticket}%0D`);
+    const newFormattedTickets = selectedTickets.map(ticket => `%20${ticket}`);
     setFormattedTickets(newFormattedTickets);
-    const whatsUrl = createWhatsAppMessage(orderData, customerData.name, customerData.phone, formattedTickets);
+    const whatsUrl = createWhatsAppMessage(orderData, customerData.name, customerData.phone, customerData.city, formattedTickets);
     setWhatsUrl(whatsUrl);
-  }, [selectedTickets, orderData, customerData.name, customerData.phone]);
+  }, [selectedTickets, orderData, customerData.name, customerData.phone, customerData.city]);
 
   const [isFormFilled, setIsFormFilled] = useState(false);
 
@@ -85,6 +86,16 @@ export default function CustomerForm({ selectedTickets, orderData }) {
             label="Número de teléfono"
             variant="outlined"
             name="phone"
+            onChange={handleInputChange}
+            required
+          />
+        </div>
+        <div className='flow-rot m-3'>
+          <TextField
+            id="enter_city"
+            label="Tu Ciudad"
+            variant="outlined"
+            name="city"
             onChange={handleInputChange}
             required
           />

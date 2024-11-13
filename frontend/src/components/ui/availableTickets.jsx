@@ -57,7 +57,7 @@ export default function AvailableTickets(props) {
     <>
         <div className="max-w-screen-md mx-auto p-4">
             <div className="overflow-y-auto max-h-96">
-                <div className="grid grid-cols-2 md:grid-cols-10 gap-x-1 gap-y-1">
+                <div className="grid grid-cols-6 md:grid-cols-10 gap-x-1 gap-y-1">
                 {props.availableTickets.map((item) => (
                     <div
                     key={item.id}

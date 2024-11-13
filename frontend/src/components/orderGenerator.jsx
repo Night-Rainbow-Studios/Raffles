@@ -46,9 +46,9 @@ export default function OrderGenerator() {
 
 
   return (
-    <div>
+    <div className="md:flex md:justify-center md:max-w-full">
         <div className='m-3 p-2 bg-white max-w-full border-2 border-slate-500' style={{display:"flex", flexDirection:"column", gap:"10px"}}>
-            <h1 className='font-sans font-bold underline'>Genera tu orden!</h1>
+            <h1 className='font-sans font-bold underline text-center'>MAQUINITA DE LA SUERTE</h1>
             <TextField id = "enter_amount" label = "Cantidad" variant = "outlined" onChange={(event) => {amount.current = event.target.value}}/>
             {/* <div className='flex justify-center max-w-full'>{operationStatus}</div> */}
             {/* <Button onClick={() => {callAPI()}} variant = "contained" sx={{width:"20vh"}}>Generar</Button> */}

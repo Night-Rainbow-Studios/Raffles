@@ -190,3 +190,33 @@ def fetch_free_tickets(mongo):
     tickets = mongo.db.tickets.find({"isFree": True})
     response = json.loads(json_util.dumps(tickets))
     return list(response)
+
+def ticket_frontend(ticket_id, mongo):
+    """
+    Busca un ticket dentro de una orden en la base de datos MongoDB y devuelve un mensaje estandarizado.
+
+    Args:
+        ticket_id (int or str): El ID del ticket a buscar.
+        mongo: Una instancia de conexión a MongoDB.
+
+    Returns:
+        dict: Un diccionario JSON con los resultados de la búsqueda:
+            - "ticket_id": El ID del ticket buscado.
+            - "payed": Un booleano indicando si el ticket está pagado.
+            - "message": Un mensaje de texto descriptivo.
+    """
+
+    order = mongo.db.orders.find_one({"tickets": ticket_id})
+
+    if order:
+        payed = order["payed"]
+        message = f"Tu ticket {ticket_id} está {'pagado' if payed else 'sin pagar. Por favor, procede con el pago o se eliminará después de una hora de efectuada la orden.'}"
+    else:
+        payed = False
+        message = "No pudimos localizar tu ticket"
+
+    return {
+        "ticket_id": ticket_id,
+        "payed": payed,
+        "message": message
+    }
