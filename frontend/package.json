@@ -35,6 +35,6 @@
     "vite": "^5.4.1"
   },
  "scripts": {
-  "start": "concurrently \"cd ../Backend && source venv/bin/activate && python main.py\" \"cd Frontend && npm run dev\""
+  "start": "concurrently \"cd ../backend && source venv/bin/activate && python main.py\" \"cd frontend && npm run dev\""
 }
 }
